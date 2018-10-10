@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # 导入socket库:
-import socket,threading,time
+import socket,threading,time,sys
+
+# reload(sys)
+# sys.setdefaultencoding('utf8')
 
 class Client(object):
     # 创建一个socket:
@@ -19,7 +22,7 @@ class Client(object):
     def send(self, mes):
         self.s.send(mes)
         # 接收数据:
-        print(self.s.recv(1024).decode('utf-8'))
+        print('这里是客户端接收的信息'+ self.s.recv(1024).decode('utf-8'))
         # buffer = []
         # while True:
         #     # 每次最多接收1k字节:
@@ -53,7 +56,7 @@ class Service(object):
                 time.sleep(1)
                 if not data or data.decode('utf-8') == 'exit':
                     break
-                sock.send(('Hello, %s!' % data.decode('utf-8')).encode('utf-8'))
+                sock.send(('Service: %s!' % data.decode('utf-8')).encode('utf-8'))
             sock.close()
             print('Connection from %s:%s closed.' % addr)
 
@@ -80,5 +83,9 @@ print('初始化客户端')
 
 client = Client()
 client.connect(ipAdd,port)
-client.send('hi1 ------')
-client.send('hi2 ------')
+while True:
+    mes = input("Clien:")
+    client.send(str(mes).encode('utf-8'))
+# while True:
+#     mes = input("clientSendMessage:")
+#     print(str(mes))
